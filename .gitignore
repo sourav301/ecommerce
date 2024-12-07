@@ -1,0 +1,65 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environment
+venv/
+.env/
+*.env
+
+# Django stuff:
+db.sqlite3
+*.log
+media/
+staticfiles/
+static/
+
+# Ignore migrations
+migrations/
+
+# Environment variable files
+*.env
+
+# Pytest cache
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache
+
+# MyPy
+.mypy_cache/
+
+# PyCharm
+*.iml
+*.iws
+.idea/
+out/
+
+# System-specific files
+.DS_Store
+Thumbs.db
+
+# Node modules (if frontend work is included in the project)
+node_modules/
+
+# Build files
+*.egg
+*.egg-info/
+dist/
+build/
