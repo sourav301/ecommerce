@@ -48,3 +48,18 @@ Content-Type: application/json
 GET http://127.0.0.1:8000/products/view/
 Content-Type: application/json
 
+
+###
+
+POST http://127.0.0.1:8000/blogs/
+Content-Type: application/json
+
+{
+    "title": "My First Blog",
+    "content": "This is the content of my first blog."
+}
+
+###
+
+GET http://127.0.0.1:8000/blogs/
+Content-Type: application/json
