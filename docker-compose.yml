@@ -1,0 +1,38 @@
+services:
+    web:
+      build:
+        context: .  # Docker Compose will look for a Dockerfile in the current directory
+      container_name: django_app
+      volumes:
+        - .:/app  # Mount current directory to /app inside the container
+      ports:
+        - "8000:8000"
+      depends_on:
+        - db
+      environment:
+        - DEBUG=1
+        - DB_NAME=postgres
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_HOST=db
+        - DB_PORT=5432
+
+    db:
+      image: postgres
+      restart: always
+      environment:
+        POSTGRES_DB: postgres
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+      volumes:
+        - pgdata:/var/lib/postgresql/data 
+      ports:
+        - "5432:5432"
+   
+    adminer:
+      image: adminer
+      restart: always
+      ports:
+        - 8080:8080
+volumes:
+  pgdata:
