@@ -15,3 +15,7 @@ class ProductCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['name', 'description', 'price', 'stock', 'category']
+
+class StockUpdateSerializer(serializers.Serializer):
+    quantity = serializers.IntegerField(min_value = 1)
+    

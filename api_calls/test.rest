@@ -15,38 +15,12 @@ GET http://127.0.0.1:8000/test_token
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 
-###
-
-POST http://127.0.0.1:8000/categories/create/
-Content-Type: application/json
-
-{
-    "name": "Electronics",
-    "desc": "Devices and gadgets"
-}
 
 ###
 
 GET http://127.0.0.1:8000/categories/view/
 Content-Type: application/json
 
-###
-
-POST http://127.0.0.1:8000/products/create/
-Content-Type: application/json
-
-{
-    "name": "Smartphone",
-    "description": "Latest model with 5G support",
-    "price": 699.99,
-    "stock": 50,
-    "category": 1
-}
-
-###
-
-GET http://127.0.0.1:8000/products/view/
-Content-Type: application/json
 
 
 ###

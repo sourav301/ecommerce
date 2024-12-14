@@ -1,0 +1,48 @@
+### Create category
+
+POST http://127.0.0.1:8000/categories/create/
+Content-Type: application/json
+
+{
+    "name": "Electronics",
+    "desc": "Devices and gadgets"
+}
+
+### Create product
+
+POST http://127.0.0.1:8000/products/create/
+Content-Type: application/json
+
+{
+    "name": "Smartphone",
+    "description": "Latest model with 5G support",
+    "price": 699.99,
+    "stock": 50,
+    "category": 1
+}
+
+### View all Products
+
+GET http://127.0.0.1:8000/products/view/
+Content-Type: application/json
+
+### View Product description
+
+GET http://127.0.0.1:8000/products/view/3/
+Content-Type: application/json
+
+
+### Stock-up product
+
+PUT http://127.0.0.1:8000/products/3/stockup/
+Content-Type: application/json
+
+{
+    "quantity": 10
+}
+
+### Delete product
+
+DELETE http://127.0.0.1:8000/products/2/delete/
+Content-Type: application/json
+
