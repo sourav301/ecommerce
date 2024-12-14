@@ -14,10 +14,10 @@ POST http://127.0.0.1:8000/products/create/
 Content-Type: application/json
 
 {
-    "name": "Smartphone",
-    "description": "Latest model with 5G support",
-    "price": 699.99,
-    "stock": 50,
+    "name": "Smart watch",
+    "description": "Watch tells time",
+    "price": 100.99,
+    "stock": 10,
     "category": 1
 }
 

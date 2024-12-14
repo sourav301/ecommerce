@@ -9,4 +9,5 @@ urlpatterns = [
     re_path('test_token',views.test_token),
     path('',include('productapp.urls')),
     path('', include('blog.urls')),  
+    path('', include('order.urls')),  
 ]
