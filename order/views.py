@@ -42,6 +42,8 @@ def add_to_cart(request):
     except Product.DoesNotExist:
         return Response({"detail": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
 
+    if quantity>product.stock:
+        return Response({"detail": f"Not enough stock. Please select less than {product.stock}"}, status=status.HTTP_404_NOT_FOUND)
     # Try to get the CartItem object, or create it if it doesn't exist
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
