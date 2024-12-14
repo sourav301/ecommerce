@@ -24,3 +24,16 @@ Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 GET http://127.0.0.1:8000/cart/view/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
+
+### Checkout cart
+
+POST http://127.0.0.1:8000/orders/checkout/
+Content-Type: application/json
+Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
+
+### View orders
+
+GET http://127.0.0.1:8000/orders/view/
+Content-Type: application/json
+Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
+
