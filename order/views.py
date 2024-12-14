@@ -105,10 +105,7 @@ def place_order_from_cart(request):
             for item in cart_items:
                 product = item.product
                 if product.stock < item.quantity:
-                    return Response(
-                        {"error": f"Not enough stock for {product.name}."},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
+                    raise ValueError(f"Not enough stock for {product.name}.")
 
                 product.stock -= item.quantity
                 product.save()
@@ -125,7 +122,9 @@ def place_order_from_cart(request):
             cart.items.all().delete()
 
             return Response({"message": "Order placed successfully.", "order_id": order.id}, status=status.HTTP_201_CREATED)
-
+    except ValueError as e:
+        # Handle stock errors and ensure rollback
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     except Cart.DoesNotExist:
         return Response({"error": "Cart not found."}, status=status.HTTP_404_NOT_FOUND)
 
