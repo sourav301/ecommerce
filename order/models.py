@@ -45,3 +45,16 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
+    
+class Payment(models.Model):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='payment')
+    status = models.CharField(max_length=10,
+                              choices=[('PENDING','Pending'),('SUCCESS','Success'),('FAILED','Failed')],default='PENDING')
+    payment_method = models.CharField(max_length=100)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    transaction_id = models.CharField(max_length=255)
+    payment_date = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.order.id} is {self.status}'

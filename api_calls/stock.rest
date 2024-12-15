@@ -34,11 +34,11 @@ Content-Type: application/json
 
 ### Stock-up product
 
-PUT http://127.0.0.1:8000/products/3/stockup/
+PUT http://127.0.0.1:8000/products/4/stockup/
 Content-Type: application/json
 
 {
-    "quantity": 10
+    "quantity": 100
 }
 
 ### Delete product
