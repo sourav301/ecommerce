@@ -5,8 +5,7 @@ from .models import Cart, CartItem, Product, Order, OrderItem
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .serializers import CartSerializer, CartItemSerializer, OrderDenormalizedSerializer
-from django.db.models import Prefetch
+from .serializers import CartSerializer, CartItemSerializer, OrderSerializer
 
 from django.db import transaction
 
@@ -132,9 +131,11 @@ def place_order_from_cart(request):
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def view_orders(request):
-    orders = Order.objects.all()
-
+def view_orders(request,user_id=None):
+    if not user_id:
+        orders = Order.objects.prefetch_related("items").select_related('user')
+    else:
+        orders = Order.objects.filter(user_id = user_id)
     # Serialize the data
-    serializer = OrderDenormalizedSerializer(orders, many=True)
+    serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)

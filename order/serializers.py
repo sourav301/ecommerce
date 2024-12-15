@@ -34,7 +34,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         fields = ['product_name', 'category_name', 'quantity', 'price']
 
-class OrderDenormalizedSerializer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     items = OrderItemSerializer(many=True)
     
