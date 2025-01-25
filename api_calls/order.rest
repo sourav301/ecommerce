@@ -8,9 +8,20 @@ GET http://127.0.0.1:8000/cart/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 
-### View all Products
+### Add product to cart
 
 POST http://127.0.0.1:8000/cart/add/
+Content-Type: application/json
+Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
+
+{
+    "product_id": 3,
+    "quantity": 1
+}
+
+### Delete item from cart
+
+POST http://127.0.0.1:8000/cart/delete/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 
@@ -39,7 +50,7 @@ Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 
 ### Payment status update
 
-PUT http://127.0.0.1:8000/payment/2/update/
+PUT http://127.0.0.1:8000/payment/1/update/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 

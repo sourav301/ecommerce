@@ -91,6 +91,40 @@ def view_cart(request):
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
+def delete_from_cart(request):
+    user = request.user
+    product_id = request.data.get('product_id')
+    quantity = request.data.get('quantity', 1)
+
+    try:
+        cart = Cart.objects.get(user=user)
+    except Cart.DoesNotExist:
+        return Response({"detail": "Cart not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    try:
+        # Get the product object
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        return Response({"detail": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        cart_item = CartItem.objects.get(cart=cart, product=product)
+    except CartItem.DoesNotExist:
+        return Response({"detail": "CartItem not found"})
+    
+    if cart_item.quantity<quantity:
+        return Response({"detail": f"Cannot delete {quantity} from {cart_item.quantity} items."})
+    
+    cart_item.quantity -= quantity
+    cart_item.save()
+    return Response({
+        "message": "Item deleted from cart",
+        "cart_item": CartItemSerializer(cart_item).data
+    }, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def place_order_from_cart(request):
     user = request.user
     cart_key = f"cart_lock:{user.id}"  # Redis key for locking the user's cart
