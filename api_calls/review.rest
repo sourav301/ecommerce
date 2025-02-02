@@ -1,0 +1,28 @@
+### Add product review
+
+POST http://127.0.0.1:8000/product/3/reviews/
+Content-Type: application/json
+Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
+
+{
+    "rating": 5,
+    "comment": "ok great product!"
+}
+
+### View product review
+
+GET http://127.0.0.1:8000/product/4/reviews/
+Content-Type: application/json
+Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
+ 
+### Update review
+
+PUT http://127.0.0.1:8000/reviews/22/
+Content-Type: application/json
+Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
+
+{
+    "product": 1,
+    "rating": 4,
+    "comment": "Updated: Really good product!"
+}

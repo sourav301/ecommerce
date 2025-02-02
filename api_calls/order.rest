@@ -1,26 +1,26 @@
+
+### Login
 POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
 {"username":"user","password":"1234"}
-### View all Products
 
+### View cart
 GET http://127.0.0.1:8000/cart/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 
 ### Add product to cart
-
 POST http://127.0.0.1:8000/cart/add/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 
 {
-    "product_id": 3,
-    "quantity": 1
+    "product_id": 4,
+    "quantity": 3
 }
 
 ### Delete item from cart
-
 POST http://127.0.0.1:8000/cart/delete/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
@@ -31,26 +31,22 @@ Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 }
 
 ### View Cart
-
 GET http://127.0.0.1:8000/cart/view/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 
 ### Checkout cart
-
 POST http://127.0.0.1:8000/orders/checkout/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 
 ### View orders
-
-GET http://127.0.0.1:8000/orders/view/1
+GET http://127.0.0.1:8000/orders/view/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 
 ### Payment status update
-
-PUT http://127.0.0.1:8000/payment/1/update/
+PUT http://127.0.0.1:8000/payment/6/update/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 

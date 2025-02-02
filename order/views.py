@@ -17,8 +17,6 @@ redis_client = redis.StrictRedis.from_url(settings.CACHES['default']['LOCATION']
 
 # Ensure the user has a cart, if not, create one
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def get_or_create_cart(request):
     user = request.user
     cart, created = Cart.objects.get_or_create(user=user)
@@ -28,8 +26,6 @@ def get_or_create_cart(request):
     return Response(serializer.data)
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def add_to_cart(request):
     user = request.user
     product_id = request.data.get('product_id')
@@ -71,8 +67,6 @@ def add_to_cart(request):
     }, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def view_cart(request):
     user = request.user
     try:
@@ -89,8 +83,6 @@ def view_cart(request):
         return Response({'error','No items in cart'},status = status.HTTP_404_NOT_FOUND)
     
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def delete_from_cart(request):
     user = request.user
     product_id = request.data.get('product_id')
@@ -123,8 +115,6 @@ def delete_from_cart(request):
     }, status=status.HTTP_201_CREATED)
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def place_order_from_cart(request):
     user = request.user
     cart_key = f"cart_lock:{user.id}"  # Redis key for locking the user's cart
@@ -146,8 +136,9 @@ def place_order_from_cart(request):
                     product = item.product
                     if product.stock < item.quantity:
                         raise ValueError(f"Not enough stock for {product.name}.")
-                
+                    
                 order = Order.objects.create(user=user)
+                
                 payment,created = Payment.objects.get_or_create(order=order,
                                                                 payment_method="Credit Card",
                                                                 amount=1,  # Assume you calculate the total order amount
@@ -164,8 +155,6 @@ def place_order_from_cart(request):
 
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def view_orders(request,user_id=None):
     if not user_id:
         orders = Order.objects.prefetch_related("items").select_related('user')
@@ -177,8 +166,6 @@ def view_orders(request,user_id=None):
 
 
 @api_view(['PUT'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def update_payment_status(request,payment_id=None):
     if not payment_id:
         return Response({"error": "Payment not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -200,10 +187,19 @@ def update_payment_status(request,payment_id=None):
                 product.save()
 
                 # Clear the cart
-                cart.items.all().delete()
+                
+            
             order = payment.order
             order.status= 'COMPLETED'
             order.save() 
+            for item in cart_items:
+                orderItem = OrderItem.objects.create(order=order,
+                                                        product=item.product,
+                                                        quantity=item.quantity,  # Specify the quantity
+                                                        price=product.price  # Specify the price
+                                                        )
+            
+            cart.items.all().delete()
 
 
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -10,4 +10,5 @@ urlpatterns = [
     path('',include('productapp.urls')),
     path('', include('blog.urls')),  
     path('', include('order.urls')),  
+    path('', include('reviews.urls'))
 ]
