@@ -1,6 +1,6 @@
 ### Add product review
 
-POST http://127.0.0.1:8000/product/3/reviews/
+POST http://127.0.0.1:8000/product/5/reviews/
 Content-Type: application/json
 Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 
