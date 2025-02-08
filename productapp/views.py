@@ -1,8 +1,11 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from .serializer import ProductSerializer, CategorySerializer, ProductCreateUpdateSerializer, StockUpdateSerializer
 from .models import Product, Category
+
+from rest_framework.permissions import IsAuthenticated
+from server.permissions import IsStockManager
 # Create your views here.
 
 @api_view(['GET'])
@@ -30,6 +33,7 @@ def getProducts(request, product_id=None):
         return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([IsStockManager])
 def createCategory(request):
     serializer = CategorySerializer(data = request.data)
     if serializer.is_valid():
@@ -39,6 +43,7 @@ def createCategory(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsStockManager])
 def createProduct(request):
     serializer = ProductCreateUpdateSerializer(data = request.data)
     if serializer.is_valid():

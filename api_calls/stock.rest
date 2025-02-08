@@ -2,6 +2,7 @@
 
 POST http://127.0.0.1:8000/categories/create/
 Content-Type: application/json
+Authorization: Token 62c846ed019772c41f3b6190ceaa9dc9694bcc2d
 
 {
     "name": "Electronics",
@@ -12,6 +13,7 @@ Content-Type: application/json
 
 POST http://127.0.0.1:8000/products/create/
 Content-Type: application/json
+Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
 
 {
     "name": "Smart watch",
@@ -25,6 +27,7 @@ Content-Type: application/json
 
 GET http://127.0.0.1:8000/products/view/
 Content-Type: application/json
+Authorization: Token 62c846ed019772c41f3b6190ceaa9dc9694bcc2d
 
 ### View Product description
 

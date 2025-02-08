@@ -7,6 +7,9 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.permissions import IsAuthenticated
 from .serializers import CartSerializer, CartItemSerializer, OrderSerializer, PaymentSerializer
 
+from rest_framework.permissions import IsAuthenticated
+from server.permissions import IsCustomer
+
 from django.db import transaction
 import redis
 from django.conf import settings
@@ -17,6 +20,7 @@ redis_client = redis.StrictRedis.from_url(settings.CACHES['default']['LOCATION']
 
 # Ensure the user has a cart, if not, create one
 @api_view(['GET'])
+@permission_classes([IsCustomer])
 def get_or_create_cart(request):
     user = request.user
     cart, created = Cart.objects.get_or_create(user=user)
@@ -25,7 +29,9 @@ def get_or_create_cart(request):
     serializer = CartSerializer(cart)
     return Response(serializer.data)
 
+
 @api_view(['POST'])
+@permission_classes([IsCustomer])
 def add_to_cart(request):
     user = request.user
     product_id = request.data.get('product_id')
@@ -67,6 +73,7 @@ def add_to_cart(request):
     }, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
+@permission_classes([IsCustomer])
 def view_cart(request):
     user = request.user
     try:
@@ -83,6 +90,7 @@ def view_cart(request):
         return Response({'error','No items in cart'},status = status.HTTP_404_NOT_FOUND)
     
 @api_view(['POST'])
+@permission_classes([IsCustomer])
 def delete_from_cart(request):
     user = request.user
     product_id = request.data.get('product_id')
@@ -115,6 +123,7 @@ def delete_from_cart(request):
     }, status=status.HTTP_201_CREATED)
 
 @api_view(['POST'])
+@permission_classes([IsCustomer])
 def place_order_from_cart(request):
     user = request.user
     cart_key = f"cart_lock:{user.id}"  # Redis key for locking the user's cart
@@ -155,6 +164,7 @@ def place_order_from_cart(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsCustomer])
 def view_orders(request,user_id=None):
     if not user_id:
         orders = Order.objects.prefetch_related("items").select_related('user')
