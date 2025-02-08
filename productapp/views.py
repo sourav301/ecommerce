@@ -44,7 +44,14 @@ def createCategory(request):
 
 @api_view(['POST'])
 @permission_classes([IsStockManager])
-def createProduct(request):
+def createProduct(request): 
+
+    category_id = request.data.get("category")
+    try:
+        category_exists = Category.objects.get(id=category_id)
+    except Category.DoesNotExist:
+        return Response({"error": "Category with this ID does not exist."}, status=status.HTTP_400_BAD_REQUEST)
+
     serializer = ProductCreateUpdateSerializer(data = request.data)
     if serializer.is_valid():
         serializer.save()

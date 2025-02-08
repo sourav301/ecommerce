@@ -20,7 +20,7 @@ Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
     "description": "Watch tells time",
     "price": 100.99,
     "stock": 10,
-    "category": 1
+    "category": 4
 }
 
 ### View all Products

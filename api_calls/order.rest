@@ -26,7 +26,7 @@ Content-Type: application/json
 Authorization: Token 62c846ed019772c41f3b6190ceaa9dc9694bcc2d
 
 {
-    "product_id": 3,
+    "product_id": 4,
     "quantity": 1
 }
 
@@ -46,7 +46,7 @@ Content-Type: application/json
 Authorization: Token 62c846ed019772c41f3b6190ceaa9dc9694bcc2d
 
 ### Payment status update
-PUT http://127.0.0.1:8000/payment/6/update/
+PUT http://127.0.0.1:8000/payment/8/update/
 Content-Type: application/json
 Authorization: Token 62c846ed019772c41f3b6190ceaa9dc9694bcc2d
 
