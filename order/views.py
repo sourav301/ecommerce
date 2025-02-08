@@ -35,8 +35,8 @@ def get_or_create_cart(request):
 def add_to_cart(request):
     user = request.user
     product_id = request.data.get('product_id')
-    quantity = request.data.get('quantity', 1)
-
+    quantity = int(request.data.get('quantity', 1))
+    
     try:
         # Get the user's cart (create if it doesn't exist)
         cart = Cart.objects.get(user=user)

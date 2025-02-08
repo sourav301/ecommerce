@@ -16,8 +16,8 @@ Content-Type: application/json
 Authorization: Token 62c846ed019772c41f3b6190ceaa9dc9694bcc2d
 
 {
-    "product_id": 4,
-    "quantity": 3
+    "product_id": 11,
+    "quantity": 1
 }
 
 ### Delete item from cart

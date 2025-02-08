@@ -35,58 +35,51 @@ class EcommerceAPITestCase(APITestCase):
         self.add_product_url = reverse('Create Product')  # Replace with actual name from urls.py
         self.add_to_cart_url = reverse('add_to_cart')  # Replace with actual name from urls.py
         self.add_category_url = reverse('Create Category')  # Replace with actual name from urls.py
-
-        response = self.client.post(self.add_category_url,{
+  
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.stock_manager_token.key)  # Add token
+        self.category_response = self.client.post(self.add_category_url,{
                                                             "name": "Electronics",
                                                             "desc": "Devices and gadgets"
-                                                        })
-        category_data = {
-            "name": "Electronics",
-            "description": "Electronic gadgets"
-        }
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.stock_manager_token.key)  # Add token
-        
-        category_response = self.client.post(self.add_category_url, category_data) 
-        self.assertEqual(category_response.status_code, status.HTTP_201_CREATED) 
-        self.category_id = category_response.data["id"]  # Extract category ID
+                                                        }) 
+        self.category_id = self.category_response.data["id"]  # Extract category ID
 
-        self.product_url = reverse("Create Product")
-        self.product_data = {
-            "name": "Smart Watch",
-            "description": "Watch tells time",
-            "price": 100.99,
-            "stock": 10,
-            "category": self.category_id
-        }
- 
-
-    def test_stock_manager_can_add_category(self):
-        """
-        Ensure only stock managers can add products.
-        """
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.stock_manager_token.key)  # Add token
-        response = self.client.post(self.add_category_url,{
-                                                            "name": "Electronics",
-                                                            "desc": "Devices and gadgets"
-                                                        })
-        print("---------------",response.data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    def test_stock_manager_can_create_product(self):
-        """
-        Ensure only stock managers can add products.
-        """
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.stock_manager_token.key)  # Add token
-        response = self.client.post(self.add_product_url, {
+        self.product_response = self.client.post(self.add_product_url, {
                                         "name": "Smart watch",
                                         "description": "Watch tells time",
                                         "price": 100.99,
                                         "stock": 10,
                                         "category": self.category_id
-                                    })
-        print(response.status_code,"---------------",response.data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-   
+                                    }) 
+        self.product_id = self.product_response.data["id"] 
+ 
+    def create_category(self):
+        self.assertEqual(self.category_response.status_code, status.HTTP_201_CREATED) 
+
+    def test_stock_manager_can_add_category(self):
+        """
+        Ensure only stock managers can add products.
+        """
+        print("add cat",self.category_id)
+        self.assertEqual(self.category_response.status_code, status.HTTP_201_CREATED)
+         
+    def test_stock_manager_can_create_product(self):
+        """
+        Ensure only stock managers can add products.
+        """
+        print("get cat",self.category_id) 
+        self.assertEqual(self.product_response.status_code, status.HTTP_201_CREATED)
+
+    def test_add_to_cart(self):
+        print("test_add_to_cart",self.product_id)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.customer_token.key)  # Add token
+        self.cart_response = self.client.post(self.add_to_cart_url, {
+                                                        "product_id": self.product_id,
+                                                        "quantity": 1
+                                                    }) 
+    
+        print("cart_response",self.cart_response.data)
+        self.assertEqual(self.cart_response.status_code, status.HTTP_201_CREATED)
     
         
     
