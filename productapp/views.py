@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from .serializer import ProductSerializer, CategorySerializer, ProductCreateUpdateSerializer, StockUpdateSerializer
+from .serializer import ProductSerializer, CategorySerializer, ProductCreateUpdateSerializer, StockUpdateSerializer,ProductImagesCreateSerializer
 from .models import Product, Category, ProductImage
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -66,8 +66,14 @@ def createProduct(request):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        serializer.save()
-        return Response(serializer.data,status=status.HTTP_201_CREATED)
+        product = serializer.save() 
+        data = serializer.data
+        parser_classes = [MultiPartParser] 
+        serializer = ProductImagesCreateSerializer(data=request.data,context={'product': product})
+        if serializer.is_valid():
+            serializer.create(validated_data=serializer.validated_data) 
+        
+        return Response(data,status=status.HTTP_201_CREATED)
     return Response(serializer.error_messages,status=status.HTTP_400_BAD_REQUEST)
 
 
