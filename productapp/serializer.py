@@ -16,30 +16,12 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True)  # Use many=True to handle multiple images
-
     class Meta:
         model = Product
         fields = '__all__'
 
-class ProductCreateSerializer(serializers.ModelSerializer):
-    images = serializers.ListField(child=serializers.ImageField(), required=False)  # Handle multiple images
-
-    class Meta:
-        model = Product
-        fields = ['name', 'description', 'price', 'stock', 'category', 'images']
-
-    def create(self, validated_data):
-        images_data = validated_data.pop('images')
-        product = Product.objects.create(**validated_data)
-
-        # Create ProductImage instances for each uploaded image
-        for image_data in images_data:
-            ProductImage.objects.create(product=product, **image_data)
-        
-        return product
     
 class ProductCreateUpdateSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Product
         fields = ['id', 'name', 'description', 'price', 'stock', 'category']
