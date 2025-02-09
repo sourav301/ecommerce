@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
-
+import json
 
 class EcommerceAPITestCase(APITestCase):
 
@@ -73,10 +73,10 @@ class EcommerceAPITestCase(APITestCase):
     def test_add_to_cart(self):
         print("test_add_to_cart",self.product_id)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.customer_token.key)  # Add token
-        self.cart_response = self.client.post(self.add_to_cart_url, {
+        self.cart_response = self.client.post(self.add_to_cart_url, json.dumps({
                                                         "product_id": self.product_id,
                                                         "quantity": 1
-                                                    }) 
+                                                    }), content_type="application/json") 
     
         print("cart_response",self.cart_response.data)
         self.assertEqual(self.cart_response.status_code, status.HTTP_201_CREATED)

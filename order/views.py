@@ -35,7 +35,7 @@ def get_or_create_cart(request):
 def add_to_cart(request):
     user = request.user
     product_id = request.data.get('product_id')
-    quantity = int(request.data.get('quantity', 1))
+    quantity = request.data.get('quantity', 1)
     
     try:
         # Get the user's cart (create if it doesn't exist)
@@ -48,7 +48,7 @@ def add_to_cart(request):
         # Get the product object
         product = Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        return Response({"detail": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"detail": f"Product {product} not found"}, status=status.HTTP_404_NOT_FOUND)
 
     if quantity>product.stock:
         return Response({"detail": f"Not enough stock. Please select less than {product.stock}"}, status=status.HTTP_404_NOT_FOUND)
