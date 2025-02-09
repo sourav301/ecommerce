@@ -56,10 +56,6 @@ class ProductImagesCreateSerializer(serializers.Serializer):
     def create(self, validated_data):
         images = validated_data.get('images', [])
         product = self.context['product']  # Assuming product passed in context
-        
-        if not images:
-            raise ValidationError("No images provided.")
-
         product_images = []
         for image in images:
             product_images.append(ProductImage.objects.create(product=product, image=image))
