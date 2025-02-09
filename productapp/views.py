@@ -2,7 +2,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from .serializer import ProductSerializer, CategorySerializer, ProductCreateUpdateSerializer, StockUpdateSerializer
-from .models import Product, Category
+from .models import Product, Category, ProductImage
+from rest_framework.parsers import MultiPartParser, FormParser
+
+from rest_framework.decorators import parser_classes
 
 from rest_framework.permissions import IsAuthenticated
 from server.permissions import IsStockManager
@@ -46,14 +49,23 @@ def createCategory(request):
 @permission_classes([IsStockManager])
 def createProduct(request): 
 
-    category_id = request.data.get("category")
-    try:
-        category_exists = Category.objects.get(id=category_id)
-    except Category.DoesNotExist:
-        return Response({"error": "Category with this ID does not exist."}, status=status.HTTP_400_BAD_REQUEST)
-
     serializer = ProductCreateUpdateSerializer(data = request.data)
+    # category_id = request.data.get("category")
+    # try:
+    #     category_exists = Category.objects.get(id=category_id)
+    # except Category.DoesNotExist:
+        # return Respnse({"error": "Category with this ID does not exist."}, status=status.HTTP_400_BAD_REQUEST)
+
     if serializer.is_valid():
+        category_id = serializer.validated_data.get('category')
+        
+        # Check if the category exists in the database
+        if not Category.objects.filter(id=category_id.id).exists():
+            return Response(
+                {"detail": "Category does not exist."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
         serializer.save()
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.error_messages,status=status.HTTP_400_BAD_REQUEST)
@@ -99,3 +111,32 @@ def delete_product(request, product_id):
         return Response({
             "error": f"Product with ID {product_id} does not exist."
         }, status=status.HTTP_404_NOT_FOUND)
+    
+
+@api_view(['POST'])
+@parser_classes([MultiPartParser, FormParser])  # To parse multipart form data
+def upload_product_image(request):
+    """
+    Upload image for a specific product and return the image URL.
+    """
+    # Check if the product exists
+    try:
+        product = Product.objects.get(id=request.data.get('product_id'))
+    except Product.DoesNotExist:
+        return Response({"detail": "Product not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    # Get the image files from the request data
+    image_files = request.FILES.getlist('images')  # 'images' is the field name for multiple images
+
+    if not image_files:
+        return Response({"detail": "No images provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+    image_urls = []
+    
+    # Loop through the image files and create ProductImage objects
+    for image_file in image_files:
+        product_image = ProductImage.objects.create(product=product, image=image_file)
+        image_urls.append(product_image.image.url)
+    
+    # Return the URLs of the uploaded images
+    return Response({"image_urls": image_urls}, status=status.HTTP_201_CREATED)

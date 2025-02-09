@@ -20,8 +20,31 @@ Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549
     "description": "Watch tells time",
     "price": 100.99,
     "stock": 10,
-    "category": 4
+    "category": 4,
+    "images":[]
 }
+
+
+### Create product with image
+POST http://127.0.0.1:8000/products/upload-product-image/ HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Token 5eab30320254a8f22a7ab054baa05e9f6bd14549  
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="product_id"
+
+13
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="images"; filename="download.jpeg"
+Content-Type: image/png
+
+< ./download.jpeg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="images"; filename="download.jpeg"
+Content-Type: image/png
+
+< ./download.jpeg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ### View all Products
 

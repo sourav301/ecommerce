@@ -10,5 +10,7 @@ urlpatterns = [
     path('products/view/<int:product_id>/',views.getProducts,name="Product description"),
     path('products/<int:product_id>/stockup/',views.stockUp),
     path('products/<int:product_id>/delete/', views.delete_product),
+    path('products/upload-product-image/', views.upload_product_image, name='upload-product-image'),
+
 
 ]
