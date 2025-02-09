@@ -24,9 +24,6 @@ class UserAuthTestCase(APITestCase):
             "email": "newuser@example.com",
         }
         response = self.client.post(self.register_url, data)
-        
-        print("Registration Response:", response.status_code, response.data)
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(User.objects.filter(username="newuser").exists())
 
@@ -39,8 +36,5 @@ class UserAuthTestCase(APITestCase):
             "password": "testpass",
         }
         response = self.client.post(self.login_url, data)
-
-        print("Login Response:", response.status_code, response.data)
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("token", response.data)  # Token should be in response
